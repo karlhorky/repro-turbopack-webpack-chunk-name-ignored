@@ -1,6 +1,6 @@
 # Turbopack ignores `webpackChunkName` when migrating from webpack
 
-Reproduction for https://github.com/vercel/next.js/issues/100050
+Reproduction for https://github.com/vercel/next.js/issues/100051
 
 Switching from webpack to Turbopack in Next.js 16.4.0 loses the name assigned to a dynamic-import chunk:
 
