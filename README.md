@@ -32,6 +32,29 @@ webpack:   .next/static/chunks/named-widget.d496cea34d28e486.js
 Turbopack: .next/static/chunks/1mgzucr0b65--.js
 ```
 
-Expected: Turbopack preserves the `webpackChunkName` name (or supports `turbopackChunkName`), retaining a content hash.
+Expected: Turbopack preserves the `webpackChunkName` name, retaining a content hash.
+
+## `turbopackChunkName`
+
+The separate page at `/turbopack-chunk-name` uses only `turbopackChunkName`:
+
+```tsx
+const { message } = await import(
+  /* turbopackChunkName: "turbopack-named-widget" */
+  "./widget.ts"
+);
+```
+
+Build and locate this chunk:
+
+```bash
+$ pnpm build
+# Next.js 16.4.0 (Turbopack), build succeeds
+
+$ rg -l 'Turbopack-named widget loaded' .next/static/chunks
+.next/static/chunks/02h-zucql4nzr.js
+```
+
+The emitted filename does not contain `turbopack-named-widget`. Expected: Turbopack supports `turbopackChunkName`, retaining a content hash.
 
 Run `pnpm start` and click **Load named widget** to load the chunk in the browser.
