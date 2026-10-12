@@ -6,7 +6,7 @@ Switching from webpack to Turbopack in Next.js 16.4.0 loses the name assigned to
 
 ```tsx
 const { default: VideoPlayer } = await import(
-  /* webpackChunkName: "lecture-video-player" */
+  /* webpackChunkName: "video-player" */
   "./VideoPlayer.tsx"
 );
 ```
@@ -15,21 +15,21 @@ const { default: VideoPlayer } = await import(
 
 1. Install dependencies: `pnpm install`
 2. Build with webpack: `pnpm build --webpack`
-3. Observe `.next/static/chunks/lecture-video-player.<hash>.js`
+3. Observe `.next/static/chunks/video-player.<hash>.js`
 4. Build with Turbopack: `pnpm build`
-5. Observe that the video player chunk has a generated filename without `lecture-video-player`
+5. Observe that the video player chunk has a generated filename without `video-player`
 
 To locate the video player chunk after either build:
 
 ```bash
-rg -l 'Lecture video' .next/static/chunks
+rg -l 'Video player' .next/static/chunks
 ```
 
 Observed filenames on Next.js 16.4.0:
 
 ```text
-webpack:   .next/static/chunks/lecture-video-player.8715e94df122d120.js
-Turbopack: .next/static/chunks/0zc2yslxnkrox.js
+webpack:   .next/static/chunks/video-player.cdffd02ab8426bbe.js
+Turbopack: .next/static/chunks/1a9ut2wf58r-n.js
 ```
 
 Expected: Turbopack preserves the `webpackChunkName` name, retaining a content hash.
@@ -40,7 +40,7 @@ The separate page at `/turbopack-chunk-name` uses only `turbopackChunkName`:
 
 ```tsx
 const { default: VideoPlayer } = await import(
-  /* turbopackChunkName: "project-video-player" */
+  /* turbopackChunkName: "video-player" */
   "./VideoPlayer.tsx"
 );
 ```
@@ -51,10 +51,11 @@ Build and locate this chunk:
 $ pnpm build
 # Next.js 16.4.0 (Turbopack), build succeeds
 
-$ rg -l 'Project video' .next/static/chunks
-.next/static/chunks/021b2n30r_y37.js
+$ rg -l 'Video player' .next/static/chunks
+.next/static/chunks/3er0_8ubnzf99.js
+.next/static/chunks/1a9ut2wf58r-n.js
 ```
 
-The emitted filename does not contain `project-video-player`. Expected: Turbopack supports `turbopackChunkName`, retaining a content hash.
+The `/turbopack-chunk-name` page imports `3er0_8ubnzf99.js`, while `/` imports `1a9ut2wf58r-n.js`. Neither filename contains `video-player`. Expected: Turbopack supports `turbopackChunkName`, retaining a content hash.
 
 Run `pnpm start` and click **Load video player** to load the chunk in the browser.

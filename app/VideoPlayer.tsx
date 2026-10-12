@@ -1,3 +1,3 @@
 export default function VideoPlayer() {
-  return <video controls aria-label="Lecture video" />;
+  return <video controls aria-label="Video player" />;
 }

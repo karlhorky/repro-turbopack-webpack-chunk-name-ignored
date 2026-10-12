@@ -10,7 +10,7 @@ export default function Home() {
       <button
         onClick={async () => {
           const { default: VideoPlayer } = await import(
-            /* webpackChunkName: "lecture-video-player" */
+            /* webpackChunkName: "video-player" */
             "./VideoPlayer.tsx"
           );
           setVideoPlayer(<VideoPlayer />);
