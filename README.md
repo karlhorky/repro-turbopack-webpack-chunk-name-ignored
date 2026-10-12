@@ -32,6 +32,6 @@ webpack:   .next/static/chunks/named-widget.d496cea34d28e486.js
 Turbopack: .next/static/chunks/1mgzucr0b65--.js
 ```
 
-Expected: Turbopack preserves the `webpackChunkName` name, retaining a content hash.
+Expected: Turbopack preserves the `webpackChunkName` name (or supports `turbopackChunkName`), retaining a content hash.
 
 Run `pnpm start` and click **Load named widget** to load the chunk in the browser.
