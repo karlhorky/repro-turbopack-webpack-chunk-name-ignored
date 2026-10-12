@@ -5,9 +5,9 @@ Reproduction for https://github.com/vercel/next.js/issues/100051
 Switching from webpack to Turbopack in Next.js 16.4.0 loses the name assigned to a dynamic-import chunk:
 
 ```tsx
-const { message } = await import(
-  /* webpackChunkName: "named-widget" */
-  "./widget.ts"
+const { default: VideoPlayer } = await import(
+  /* webpackChunkName: "lecture-video-player" */
+  "./VideoPlayer.tsx"
 );
 ```
 
@@ -15,21 +15,21 @@ const { message } = await import(
 
 1. Install dependencies: `pnpm install`
 2. Build with webpack: `pnpm build --webpack`
-3. Observe `.next/static/chunks/named-widget.<hash>.js`
+3. Observe `.next/static/chunks/lecture-video-player.<hash>.js`
 4. Build with Turbopack: `pnpm build`
-5. Observe that the widget chunk has a generated filename without `named-widget`
+5. Observe that the video player chunk has a generated filename without `lecture-video-player`
 
-To locate the widget chunk after either build:
+To locate the video player chunk after either build:
 
 ```bash
-rg -l 'Named widget loaded' .next/static/chunks
+rg -l 'Lecture video' .next/static/chunks
 ```
 
 Observed filenames on Next.js 16.4.0:
 
 ```text
-webpack:   .next/static/chunks/named-widget.d496cea34d28e486.js
-Turbopack: .next/static/chunks/1mgzucr0b65--.js
+webpack:   .next/static/chunks/lecture-video-player.8715e94df122d120.js
+Turbopack: .next/static/chunks/0zc2yslxnkrox.js
 ```
 
 Expected: Turbopack preserves the `webpackChunkName` name, retaining a content hash.
@@ -39,9 +39,9 @@ Expected: Turbopack preserves the `webpackChunkName` name, retaining a content h
 The separate page at `/turbopack-chunk-name` uses only `turbopackChunkName`:
 
 ```tsx
-const { message } = await import(
-  /* turbopackChunkName: "turbopack-named-widget" */
-  "./widget.ts"
+const { default: VideoPlayer } = await import(
+  /* turbopackChunkName: "project-video-player" */
+  "./VideoPlayer.tsx"
 );
 ```
 
@@ -51,10 +51,10 @@ Build and locate this chunk:
 $ pnpm build
 # Next.js 16.4.0 (Turbopack), build succeeds
 
-$ rg -l 'Turbopack-named widget loaded' .next/static/chunks
-.next/static/chunks/02h-zucql4nzr.js
+$ rg -l 'Project video' .next/static/chunks
+.next/static/chunks/021b2n30r_y37.js
 ```
 
-The emitted filename does not contain `turbopack-named-widget`. Expected: Turbopack supports `turbopackChunkName`, retaining a content hash.
+The emitted filename does not contain `project-video-player`. Expected: Turbopack supports `turbopackChunkName`, retaining a content hash.
 
-Run `pnpm start` and click **Load named widget** to load the chunk in the browser.
+Run `pnpm start` and click **Load video player** to load the chunk in the browser.
